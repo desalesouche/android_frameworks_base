@@ -2438,9 +2438,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             Display d = ((WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE))
                     .getDefaultDisplay();
             if (d.getWidth() > d.getHeight()) {
-                mPortraitRotation = Surface.ROTATION_90;
+                mPortraitRotation = Surface.ROTATION_270;
                 mLandscapeRotation = Surface.ROTATION_0;
-                mUpsideDownRotation = Surface.ROTATION_270;
+                mUpsideDownRotation = Surface.ROTATION_90;
                 mSeascapeRotation = Surface.ROTATION_180;
             } else {
                 mPortraitRotation = Surface.ROTATION_0;

@@ -109,8 +109,9 @@ public class WifiService extends IWifiManager.Stub {
     private static final Pattern scanResultPattern = Pattern.compile("\t+");
     private final WifiStateTracker mWifiStateTracker;
     /* TODO: fetch a configurable interface */
-    private static final String SOFTAP_IFACE = "wl0.1";
-    private static final String TI_SOFTAP_IFACE = "tiap0";
+    private static final String SOFTAP_IFACE = "softap.0";
+    // private static final String TI_SOFTAP_IFACE = "tiap0";
+    private static final String TI_SOFTAP_IFACE = SOFTAP_IFACE;
 
     private Context mContext;
     private int mWifiApState;
@@ -819,7 +820,7 @@ public class WifiService extends IWifiManager.Stub {
                     return false;
                 }
             } else {
-                if (!mWifiStateTracker.loadDriver()) {
+                if (!mWifiStateTracker.loadHotspotDriver()) {
                     Slog.e(TAG, "Failed to load Wi-Fi driver for AP mode");
                     setWifiApEnabledState(WIFI_AP_STATE_FAILED, uid, DriverAction.NO_DRIVER_UNLOAD);
                     return false;
@@ -859,7 +860,7 @@ public class WifiService extends IWifiManager.Stub {
                     return false;
                 }
             } else {
-                if (!mWifiStateTracker.unloadDriver()) {
+                if (!mWifiStateTracker.unloadHotspotDriver()) {
                     Slog.e(TAG, "Failed to unload Wi-Fi driver for AP mode");
                     setWifiApEnabledState(WIFI_AP_STATE_FAILED, uid, DriverAction.NO_DRIVER_UNLOAD);
                     return false;
@@ -894,7 +895,7 @@ public class WifiService extends IWifiManager.Stub {
             if (SystemProperties.getBoolean("wifi.hotspot.ti", false)) {
                 mWifiStateTracker.unloadHotspotDriver();
             } else {
-                mWifiStateTracker.unloadDriver();
+                mWifiStateTracker.unloadHotspotDriver();
             }
         }
 
