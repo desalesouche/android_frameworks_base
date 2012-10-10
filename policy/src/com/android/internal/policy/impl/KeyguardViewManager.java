@@ -118,6 +118,10 @@ public class KeyguardViewManager implements KeyguardWindowController {
                     flags, PixelFormat.TRANSLUCENT);
             lp.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
             lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
+            if(SystemProperties.getBoolean("lockscreen.rot_override", false)) {
+                if(DEBUG) Log.d(TAG, "Robin Fischer's lockscreen rotation mode enabled.");
+                lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_USER;
+            }
             lp.setTitle("Keyguard");
             mWindowLayoutParams = lp;
 
