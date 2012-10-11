@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.graphics.PixelFormat;
 import android.graphics.Canvas;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
