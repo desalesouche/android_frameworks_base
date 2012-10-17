@@ -1,6 +1,10 @@
 /*
  *
- * Please see QualcommSharedRIL.java, HuaweiRIL.java, LGEQualcommRIL.java, SemcRIL.java
+ * Please see: QualcommSharedRIL.java,
+ *             HuaweiRIL.java,
+ *             LGEQualcommRIL.java,
+ *             SemcRIL.java,
+ *             RILConstants.java
  *
  */
 
@@ -58,11 +62,12 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
     send(rr);
   }
 
-  // Reviewed 2012-10-16
+  // Reviewed 2012-10-17
 
   protected DataCallState getDataCallState(Parcel p, int version)
   {
     DataCallState dcs = new DataCallState();
+    String ts;
 
     boolean oldRil = needsOldRilFeature("datacall");
 
@@ -79,14 +84,14 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
 
       if((dcs.status == DataConnection.FailCause.NONE.getErrorCode()) && (TextUtils.isEmpty(dcs.ifname)) && (dcs.active != 0)) throw new RuntimeException("getDataCallState, no ifname");
 
-      String str2 = p.readString();
-      if(!TextUtils.isEmpty(str2)) dcs.addresses = str2.split(" ");
+      ts = p.readString();
+      if(!TextUtils.isEmpty(ts)) dcs.addresses = ts.split(" ");
 
-      String str3 = p.readString();
-      if(!TextUtils.isEmpty(str3)) dcs.dnses = str3.split(" ");
+      ts = p.readString();
+      if(!TextUtils.isEmpty(ts)) dcs.dnses = ts.split(" ");
 
-      String str4 = p.readString();
-      if(!TextUtils.isEmpty(str4)) dcs.gateways = str4.split(" ");
+      ts = p.readString();
+      if(!TextUtils.isEmpty(ts)) dcs.gateways = ts.split(" ");
     }
     else {
       dcs.version = 4;
@@ -98,8 +103,8 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
       p.readString();
       if(TextUtils.isEmpty(dcs.ifname)) dcs.ifname = this.mLastDataIface[0];
 
-      String str1 = p.readString();
-      if (!TextUtils.isEmpty(str1)) dcs.addresses = str1.split(" ");
+      ts = p.readString();
+      if(!TextUtils.isEmpty(ts)) dcs.addresses = ts.split(" ");
 
       p.readInt();
       p.readInt();
