@@ -183,16 +183,18 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
     send(rr);
   }
 
-  // Reviewed 2012-10-16
-  // TODO Check status: Replaced with LGEQualcommRIL.java
+  // Reviewed 2012-10-18
+  // TODO Check status: Merged LGEQualcommRIL.java with smali
 
   protected Object responseIccCardStatus(Parcel p)
   {
     IccCardApplication ca;
 
     IccCardStatus status = new IccCardStatus();
+
     status.setCardState(p.readInt());
     status.setUniversalPinState(p.readInt());
+
     int gsmUmtsSubscriptionAppCount = p.readInt();
 
     for(int i=0; i<gsmUmtsSubscriptionAppCount; i++) {
@@ -214,6 +216,7 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
     int numApplications = p.readInt();
 
     // limit to maximum allowed applications
+    // Assuming IccCardStart.CARD_MAX_APPS := 8
 
     if(numApplications>IccCardStatus.CARD_MAX_APPS) numApplications = IccCardStatus.CARD_MAX_APPS;
 
@@ -236,7 +239,8 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
       p.readInt();
     }
 
-    int appIndex = -1;
+    // int appIndex = -1;
+    int appIndex;
 
     if (mPhoneType == RILConstants.CDMA_PHONE) {
       appIndex = status.getCdmaSubscriptionAppIndex();
@@ -244,12 +248,22 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
     } else {
       appIndex = status.getGsmUmtsSubscriptionAppIndex();
       Log.d(LOG_TAG, "This is a GSM PHONE " + appIndex);
+
+      IccCardApplication application = status.getApplication(appIndex);
+      mAid = application.aid;
+
+      this.mUSIM = true;
+      this.mSetPreferredNetworkType = this.mPreferredNetworkType;
+
+      if(TextUtils.isEmpty(this.mAid)) this.mAid = "";
+
+      Log.d("RILJ", "mAid " + this.mAid);
     }
 
     IccCardApplication application = status.getApplication(appIndex);
     mAid = application.aid;
-    mPinState = (application.pin1 == IccCardStatus.PinState.PINSTATE_DISABLED || 
-                 application.pin1 == IccCardStatus.PinState.PINSTATE_UNKNOWN) ? 0 : 1;
+    // mPinState = (application.pin1 == IccCardStatus.PinState.PINSTATE_DISABLED || 
+    //              application.pin1 == IccCardStatus.PinState.PINSTATE_UNKNOWN) ? 0 : 1;
 
     return status;
   }
