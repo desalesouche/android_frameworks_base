@@ -451,31 +451,31 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
     send(rr);
   }
 
-  // Reviewed 2012-11-13
+  // Reviewed 2012-11-14
 
   protected Object responseOperatorInfos(Parcel p)
   {
     String strings[] = (String [])responseStrings(p);
     ArrayList<OperatorInfo> ret;
 
-    if(strings.length % 5 != 0)
+    if(strings.length % 4 != 0)
     {
      // Dump strings
 
      for(int i=0; i<strings.length; i++)
      {
-      if(RILJ_LOGD) riljLog(strings[i] + " * ");
+      if(RILJ_LOGD) riljLog(strings[i]);
      }
 
      // Throw exception
 
      throw new RuntimeException("RIL_REQUEST_QUERY_AVAILABLE_NETWORKS: invalid response. Got "
-                                + strings.length + " strings, expected multiple of 5");
+                                + strings.length + " strings, but expected multiple of 4");
     }
 
-    ret = new ArrayList<OperatorInfo>(strings.length / 5);
+    ret = new ArrayList<OperatorInfo>(strings.length / 4);
 
-    for(int i=0; i<strings.length; i+=5)
+    for(int i=0; i<strings.length; i+=4)
     {
      ret.add(new OperatorInfo(strings[i+0],
                               strings[i+1],
