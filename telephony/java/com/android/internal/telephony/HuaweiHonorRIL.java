@@ -20,6 +20,8 @@ import android.os.SystemProperties;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 public class HuaweiHonorRIL extends QualcommSharedRIL
   implements CommandsInterface
 {
