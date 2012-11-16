@@ -271,39 +271,6 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
   }
 
   // Reviewed 2012-10-16
-  // TODO Just replaced it with the default in QualcommSharedRIL.java
-
-  protected Object responseSignalStrength(Parcel p)
-  {
-    int numInts = 12;
-    int response[];
-
-    boolean oldRil = needsOldRilFeature("signalstrength");
-    boolean noLte = false;
-
-    /* TODO: Add SignalStrength class to match RIL_SignalStrength */
-    response = new int[numInts];
-    for(int i=0; i<numInts; i++) {
-     if((oldRil || noLte) && i>6 && i<12) {
-      response[i] = -1;
-     } else {
-      response[i] = p.readInt();
-     }
-
-     if(i==7 && response[i] == 99) {
-      response[i] = -1;
-      noLte = true;
-     }
-
-     if(i == 8 && !(noLte || oldRil)) {
-      response[i] *= -1;
-     }
-    }
-
-    return response;
-  }
-
-  // Reviewed 2012-10-16
   // TODO Check if LGEQualcommRIL.java is right about lockState / lockString
 
   public void setFacilityLock(String facility, boolean lockState, String password, int serviceClass, Message result)
