@@ -333,7 +333,7 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
     send(rr);
   }
 
-  // Reviewed 2012-11-14
+  // Reviewed 2012-11-17
 
   protected Object responseOperatorInfos(Parcel p)
   {
@@ -359,9 +359,20 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
 
     for(int i=0; i<strings.length; i+=4)
     {
-     ret.add(new OperatorInfo(strings[i+0],
+     // Let's see if we are getting something like "26202 3G" here
+
+     String Numeric[] = strings[i+2].split(" ");
+
+     // If that is the case, filter 3G entries and just create OperatorInfo for 2G
+
+     if(Numeric.length > 1)
+     {
+      if(Numeric[1].startsWith("3G")) continue;
+     }
+
+     ret.add(new OperatorInfo(strings[i+1],
                               strings[i+1],
-                              strings[i+2],
+                              Numeric[0],
                               strings[i+3]));
     }
 
