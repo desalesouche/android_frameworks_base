@@ -194,21 +194,37 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
 
     IccCardStatus status = new IccCardStatus();
 
+    if(RILJ_LOGD)
+     {
+      riljLog(">> responseIccCardStatus");
+      riljLog(":: Parcel.dataSize() := " + p.dataSize());
+      riljLog(":: Parcel.marshall() := ");
+      riljLog(p.marshall().toString());
+     }
+
+    // Get card & PIN status
+
     status.setCardState(p.readInt());
     status.setUniversalPinState(p.readInt());
 
+    // Get GSM/UMTS app count & app index for the first one
+
     int gsmUmtsSubscriptionAppCount = p.readInt();
 
-    for(int i=0; i<gsmUmtsSubscriptionAppCount; i++) {
+    for(int i=0; i<gsmUmtsSubscriptionAppCount; i++)
+    {
       if(i==0)
         status.setGsmUmtsSubscriptionAppIndex(p.readInt());
       else
         p.readInt();
     }
 
+    // Get CDMA app count & app index for the first one
+
     int cdmaSubscriptionAppCount = p.readInt();
 
-    for(int i=0; i<cdmaSubscriptionAppCount; i++) {
+    for(int i=0; i<cdmaSubscriptionAppCount; i++)
+    {
       if(i==0)
         status.setCdmaSubscriptionAppIndex(p.readInt());
       else
@@ -266,6 +282,8 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
     mAid = application.aid;
     // mPinState = (application.pin1 == IccCardStatus.PinState.PINSTATE_DISABLED || 
     //              application.pin1 == IccCardStatus.PinState.PINSTATE_UNKNOWN) ? 0 : 1;
+
+    if(RILJ_LOGD) riljLog("<< responseIccCardStatus");
 
     return status;
   }
@@ -455,7 +473,17 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
       if(Numeric[1].startsWith("3G")) continue;
      }
 
-     ret.add(new OperatorInfo(strings[i+1],
+     // Check the state {current|available|forbidden} and make it somhow visible for the user
+
+     String Provider = strings[i+1];
+
+     if(strings[i+3].startsWith("cur")) Provider.append(" (*)");
+     if(strings[i+3].startsWith("ava")) Provider.append(" (+)");
+     if(strings[i+3].startsWith("for")) Provider.append(" (-)");
+
+     // Finally add the Operator
+
+     ret.add(new OperatorInfo(Provider,
                               strings[i+1],
                               Numeric[0],
                               strings[i+3]));
