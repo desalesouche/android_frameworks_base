@@ -475,7 +475,7 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
 
      // Check the state {current|available|forbidden} and make it somhow visible for the user
 
-     String Provider = strings[i+1];
+     StringBuffer Provider = new StringBuffer().append(strings[i+1]);
 
      if(strings[i+3].startsWith("cur")) Provider.append(" (*)");
      if(strings[i+3].startsWith("ava")) Provider.append(" (+)");
@@ -483,7 +483,7 @@ public class HuaweiHonorRIL extends QualcommSharedRIL
 
      // Finally add the Operator
 
-     ret.add(new OperatorInfo(Provider,
+     ret.add(new OperatorInfo(Provider.toString(),
                               strings[i+1],
                               Numeric[0],
                               strings[i+3]));
